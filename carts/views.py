@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from . import views
 from store.models import Product
-from .models import cart,CartItem
+from .models import Cart,CartItem
 
 
 # Create your views here.
@@ -14,13 +14,14 @@ def _cart_id(request):
 def add_cart(request,product_id):
     product = Product.objects.get(id=product_id)
     try:
-        cart = cart.objects.get(cart_id=_cart_id(request))
-    except cart.DoesNotExist:
-        cart = cart.objects.create(
+
+        cart = Cart.objects.get(cart_id=_cart_id(request))
+    except Cart.DoesNotExist:
+        cart = Cart.objects.create(
         cart_id = _cart_id(request)
         )
 
-        cart.save()
+    cart.save()
 
     try:
         cart_item = CartItem.objects.get(product=product,cart=cart)
@@ -29,7 +30,7 @@ def add_cart(request,product_id):
     except CartItem.DoesNotExist:
         cart_item = CartItem.objects.create(
         product = product,
-        quanity = 1,
+        quantity = 1,
         cart = cart,
         )
         cart_item.save()
